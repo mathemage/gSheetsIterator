@@ -50,35 +50,54 @@ def get_credentials():
         print('Storing credentials to ' + credential_path)
     return credentials
 
-def main():
-    """Shows basic usage of the Sheets API.
 
-    Creates a Sheets API service object and prints the names and majors of
-    students in a sample spreadsheet:
-    https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-    """
+def connect():
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
+    return service
 
-    spreadsheetId = '1QIltp_iIDwlI5dVQUovocmB89nglJTVBJjEFac46APU'
-    rangeName = 'Sheet1!A:C'
+
+def get_sheet_content(service, spreadsheet_id='1QIltp_iIDwlI5dVQUovocmB89nglJTVBJjEFac46APU'):
+    range_name = 'Sheet1!A:C'
     result = service.spreadsheets().values().get(
-        spreadsheetId=spreadsheetId, range=rangeName).execute()
-    values = result.get('values', [])
+        spreadsheetId=spreadsheet_id, range=range_name).execute()
+    content = result.get('values', [])
+    return content
 
-    if not values:
+
+def display_content(content):
+    if not content:
         print('No data found.')
     else:
-        heading = values[0]
-        entries = values[1:]
+        heading = content[0]
+        entries = content[1:]
         print('%s, %s, %s: ' % (heading[0], heading[1], heading[2]))
         for row in entries:
-            # Print columns A and E, which correspond to indices 0 and 4.
             print('%s, %s, %s' % (row[0], row[1], row[2]))
+
+
+def main():
+    """Shows basic usage of the Sheets API.
+
+    Creates a Sheets API service object and prints the names and majors of
+    students in a sample spreadsheet:
+    https://docs.google.com/spreadsheets/d/1QIltp_iIDwlI5dVQUovocmB89nglJTVBJjEFac46APU/
+    """
+    service = connect()
+
+    content = get_sheet_content(service)
+    print('Sheet ID: 1QIltp_iIDwlI5dVQUovocmB89nglJTVBJjEFac46APU')
+    display_content(content)
+
+    print()
+
+    print('Sheet ID: 1MFIzsbXBjiELmyLrEDRfxXjmSKkVY-qs_MfED0vWP_I')
+    content = get_sheet_content(service, spreadsheet_id='1MFIzsbXBjiELmyLrEDRfxXjmSKkVY-qs_MfED0vWP_I')
+    display_content(content)
 
 
 if __name__ == '__main__':
