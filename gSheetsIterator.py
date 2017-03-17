@@ -62,6 +62,9 @@ def connect():
 
 
 def get_sheet_content(service, spreadsheet_id='1QIltp_iIDwlI5dVQUovocmB89nglJTVBJjEFac46APU'):
+    '''
+    :return: return list of rows, where each row is again list of cell values
+    '''
     range_name = 'Sheet1!A:C'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheet_id, range=range_name).execute()
