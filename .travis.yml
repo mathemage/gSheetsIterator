@@ -7,4 +7,4 @@ python:
   - "3.7-dev" # 3.7 development branch
   - "nightly" # currently points to 3.7-dev
 script:
-- python3 gSheetIterator.py
+- python3 gSheetsIterator.py
