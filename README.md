@@ -1,4 +1,6 @@
 # gSheetsIterator
+[![Build Status](https://travis-ci.org/mathemage/gSheetsIterator.svg?branch=master)](https://travis-ci.org/mathemage/gSheetsIterator)
+
 a simple tool to iterate over rows of a Google Sheet
 
 Requirements
